@@ -1,12 +1,21 @@
 var app = require('http').createServer(handler), 
-io = require('socket.io').listen(app), 
 fs = require('fs'),
 os = require('os'),
 sp = require("serialport");
+
+
+
+sp.list(function (err, ports) {
+  ports.forEach(function(port) {
+    console.log(port.comName);
+    console.log(port.pnpId);
+    console.log(port.manufacturer);
+  });
+});
   
 //init for SerialPort connected to Arduino
 var SerialPort = sp.SerialPort
-var serialPort = new SerialPort('/dev/ttyACM0', 
+var serialPort = new SerialPort('/dev/cu.usbmodem1411', 
 				{   baudrate: 9600,
 				    dataBits: 8,
 				    parity: 'none',
@@ -52,46 +61,46 @@ function handler (req, res) {
 		});
 }
 
-io.sockets.on('connection', function (socket) {
+// io.sockets.on('connection', function (socket) {
     
-    //Send client with his socket id
-    socket.emit('your id', 
-		{ id: socket.id});
+//     //Send client with his socket id
+//     socket.emit('your id', 
+// 		{ id: socket.id});
     
-    //Info all clients a new client caaonnected
-    io.sockets.emit('on connection', 
-		    { client: socket.id,
-		      clientCount: io.sockets.clients().length,
-		    });
+//     //Info all clients a new client caaonnected
+//     io.sockets.emit('on connection', 
+// 		    { client: socket.id,
+// 		      clientCount: io.sockets.clients().length,
+// 		    });
         
-    //Set the current common status to the new client
-    socket.emit('ack button status', { status: commonStatus });
+//     //Set the current common status to the new client
+//     socket.emit('ack button status', { status: commonStatus });
     
-    socket.on('button update event', function (data) {
-        console.log(data.status);
+//     socket.on('button update event', function (data) {
+//         console.log(data.status);
         
-        //acknowledge with inverted status, 
-        //to toggle button text in client
-        if(data.status == 'ON'){
-            console.log("ON->OFF");
-            commonStatus = 'OFF';
-            serialPort.write("LEDON\n");
-        }else{
-            console.log("OFF->ON");
-            commonStatus = 'ON';
-            serialPort.write("LEDOFF\n");
-        }
-        io.sockets.emit('ack button status', 
-			{ status: commonStatus,
-			  by: socket.id
-			});
-    });
+//         //acknowledge with inverted status, 
+//         //to toggle button text in client
+//         if(data.status == 'ON'){
+//             console.log("ON->OFF");
+//             commonStatus = 'OFF';
+//             serialPort.write("LEDON\n");
+//         }else{
+//             console.log("OFF->ON");
+//             commonStatus = 'ON';
+//             serialPort.write("LEDOFF\n");
+//         }
+//         io.sockets.emit('ack button status', 
+// 			{ status: commonStatus,
+// 			  by: socket.id
+// 			});
+//     });
     
-    //Info all clients if this client disconnect
-    socket.on('disconnect', function () {
-        io.sockets.emit('on disconnect', 
-			{ client: socket.id,
-			  clientCount: io.sockets.clients().length-1,
-			});
-    });
-});
+//     //Info all clients if this client disconnect
+//     socket.on('disconnect', function () {
+//         io.sockets.emit('on disconnect', 
+// 			{ client: socket.id,
+// 			  clientCount: io.sockets.clients().length-1,
+// 			});
+//     });
+// });
