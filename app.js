@@ -7,6 +7,20 @@ var SENSOR_IDS = {
 var arduinoSerialPort = "/dev/ttyS1";
 //var arduinoSerialPort = '/dev/cu.usbmodem1411';
 
+var celciusConvMultiplier = 9.0/5.0;
+var celciusConvConstant = 32.0;
+
+Number.prototype.toFixedDown = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+    m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
+
+function convertCelciusToFahrenheit(celcius) {
+    var converted = (celcius * celciusConvMultiplier) + celciusConvConstant;
+    return converted.toFixed(1);
+}
+
 
 var app = require('http').createServer(handler), 
 fs = require('fs'),
@@ -61,7 +75,8 @@ serialPort.on("data", function (data) {
             for (var i = 0; i < Object.keys(parsedData.data).length; i++) {
                 var numericSensorId = Object.keys(parsedData.data)[i];
                 if (SENSOR_IDS[numericSensorId]) {
-                    postObj[SENSOR_IDS[numericSensorId]] = parsedData.data[numericSensorId];
+		    var convertedTemp = convertCelciusToFahrenheit(parsedData.data[numericSensorId]);
+								   postObj[SENSOR_IDS[numericSensorId]] = convertedTemp;
                 }
             }
 
