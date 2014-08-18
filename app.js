@@ -20,12 +20,16 @@ var serialPort = new SerialPort('/dev/cu.usbmodem1411',
 				    dataBits: 8,
 				    parity: 'none',
 				    stopBits: 1,
-				    flowControl: false
+				    flowControl: false,
+                    parser: sp.parsers.readline("\n")
 				});
     
 serialPort.on("open", function () {
-    console.log('serialPort open');
-    serialPort.write("LEDOFF\n");
+    console.log('serialPort open');    
+});
+
+serialPort.on("data", function (data) {
+  console.log('serial data: ' + data);
 });
     
 //Display my IP
