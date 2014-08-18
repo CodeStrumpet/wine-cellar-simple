@@ -4,6 +4,9 @@ var SENSOR_IDS = {
     "2923": "cellar1"
 };
 
+var arduinoSerialPort = "/dev/ttyS1";
+//var arduinoSerialPort = '/dev/cu.usbmodem1411';
+
 
 var app = require('http').createServer(handler), 
 fs = require('fs'),
@@ -27,7 +30,7 @@ sp.list(function (err, ports) {
   
 //init for SerialPort connected to Arduino
 var SerialPort = sp.SerialPort
-var serialPort = new SerialPort('/dev/cu.usbmodem1411', 
+var serialPort = new SerialPort(arduinoSerialPort,
 				{   baudrate: 9600,
 				    dataBits: 8,
 				    parity: 'none',
