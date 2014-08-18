@@ -20,6 +20,8 @@
  
 #define ONEWIREPIN   3		/* OneWire bus on digital pin 7 */
 #define MAXSENSORS   5		   /* Maximum number of sensors on OneWire bus */
+
+#define UPDATE_MILLIS 20000
  
 // Model IDs  
 #define DS18S20      0x10
@@ -218,7 +220,7 @@ void loop(void) {
 
   Serial.println(simpleData);
 
-  delay(1000);
+  delay(UPDATE_MILLIS); // sleep for this period
 }
 
 int getSensorIntAddr(int sensorIndex) {

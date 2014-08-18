@@ -69,13 +69,11 @@ serialPort.on("data", function (data) {
                     if (error) {
                         console.log(JSON.stringify(error));
                     }
-                    //console.log(error);
-                    //console.log(response);
+
                 });
-            // http://data.sparkfun.com/input/1nnZl2NVJqILvXoY8dax?private_key=0mmlD4dGEZS1RYBeWow9&cellar1=25.35&outside1=14.02&room1=24.08
         }
     }
-  //console.log('serial data: ' + data);
+
 });
     
 //Display my IP
@@ -110,47 +108,3 @@ function handler (req, res) {
 		    res.end(data);
 		});
 }
-
-// io.sockets.on('connection', function (socket) {
-    
-//     //Send client with his socket id
-//     socket.emit('your id', 
-// 		{ id: socket.id});
-    
-//     //Info all clients a new client caaonnected
-//     io.sockets.emit('on connection', 
-// 		    { client: socket.id,
-// 		      clientCount: io.sockets.clients().length,
-// 		    });
-        
-//     //Set the current common status to the new client
-//     socket.emit('ack button status', { status: commonStatus });
-    
-//     socket.on('button update event', function (data) {
-//         console.log(data.status);
-        
-//         //acknowledge with inverted status, 
-//         //to toggle button text in client
-//         if(data.status == 'ON'){
-//             console.log("ON->OFF");
-//             commonStatus = 'OFF';
-//             serialPort.write("LEDON\n");
-//         }else{
-//             console.log("OFF->ON");
-//             commonStatus = 'ON';
-//             serialPort.write("LEDOFF\n");
-//         }
-//         io.sockets.emit('ack button status', 
-// 			{ status: commonStatus,
-// 			  by: socket.id
-// 			});
-//     });
-    
-//     //Info all clients if this client disconnect
-//     socket.on('disconnect', function () {
-//         io.sockets.emit('on disconnect', 
-// 			{ client: socket.id,
-// 			  clientCount: io.sockets.clients().length-1,
-// 			});
-//     });
-// });
