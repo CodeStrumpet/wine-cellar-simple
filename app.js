@@ -1,8 +1,20 @@
+var SENSOR_IDS = {
+    "1660": "outside1",
+    "2411": "room1",
+    "2923": "cellar1"
+};
+
+
 var app = require('http').createServer(handler), 
 fs = require('fs'),
 os = require('os'),
-sp = require("serialport");
+sp = require('serialport'),
+request = require('request'),
+nconf = require('nconf');
 
+nconf.argv()
+    .env()
+    .file({ file: './.ENV' });
 
 
 sp.list(function (err, ports) {
@@ -29,7 +41,41 @@ serialPort.on("open", function () {
 });
 
 serialPort.on("data", function (data) {
-  console.log('serial data: ' + data);
+    try {
+        var parsedData = JSON.parse(data);
+    } catch(e) {
+        console.log(e);
+        console.log(data);
+    }
+
+    if (parsedData) {
+        if (parsedData.message) {
+            console.log("FYI: " + parsedData.message);
+        } else if (parsedData.data) {
+            //console.log(JSON.stringify(parsedData.data));
+
+            var postObj = {};
+            for (var i = 0; i < Object.keys(parsedData.data).length; i++) {
+                var numericSensorId = Object.keys(parsedData.data)[i];
+                if (SENSOR_IDS[numericSensorId]) {
+                    postObj[SENSOR_IDS[numericSensorId]] = parsedData.data[numericSensorId];
+                }
+            }
+
+            console.log(JSON.stringify(postObj));
+
+            request.post('http://data.sparkfun.com/input/1nnZl2NVJqILvXoY8dax?private_key=0mmlD4dGEZS1RYBeWow9', 
+                {form:postObj}, function(error, response, body) {
+                    if (error) {
+                        console.log(JSON.stringify(error));
+                    }
+                    //console.log(error);
+                    //console.log(response);
+                });
+            // http://data.sparkfun.com/input/1nnZl2NVJqILvXoY8dax?private_key=0mmlD4dGEZS1RYBeWow9&cellar1=25.35&outside1=14.02&room1=24.08
+        }
+    }
+  //console.log('serial data: ' + data);
 });
     
 //Display my IP
