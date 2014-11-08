@@ -87,7 +87,7 @@ serialPort.on("data", function (data) {
                 }
             }
 
-            console.log(JSON.stringify(postObj));
+            //console.log(JSON.stringify(postObj));
 
             request.post('http://data.sparkfun.com/input/1nnZl2NVJqILvXoY8dax?private_key=0mmlD4dGEZS1RYBeWow9', 
                 {form:postObj}, function(error, response, body) {
