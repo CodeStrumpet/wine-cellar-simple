@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var SENSOR_IDS = {
     "1660": "outside1",
     "2411": "room1",
@@ -72,11 +74,16 @@ serialPort.on("data", function (data) {
             //console.log(JSON.stringify(parsedData.data));
 
             var postObj = {};
+
+	    _.forEach(_.values(SENSOR_IDS), function(item) {
+		postObj[item] = 0.0;
+	    });
+	    
             for (var i = 0; i < Object.keys(parsedData.data).length; i++) {
                 var numericSensorId = Object.keys(parsedData.data)[i];
                 if (SENSOR_IDS[numericSensorId]) {
 		    var convertedTemp = convertCelciusToFahrenheit(parsedData.data[numericSensorId]);
-								   postObj[SENSOR_IDS[numericSensorId]] = convertedTemp;
+		    postObj[SENSOR_IDS[numericSensorId]] = convertedTemp;
                 }
             }
 
@@ -86,7 +93,9 @@ serialPort.on("data", function (data) {
                 {form:postObj}, function(error, response, body) {
                     if (error) {
                         console.log(JSON.stringify(error));
-                    }
+                    } else {
+			console.log(response.body);
+		    }
 
                 });
         }

@@ -1,0 +1,28 @@
+{
+  "name": "wine-cellar-simple",
+  "version": "0.0.0",
+  "description": "Tool for monitoring and regulating the temperature of a wine cellar (arduino integration)",
+  "main": "app.js",
+  "dependencies": {
+    "request": "~2.40.0",
+    "lodash": "~2.4.1",
+    "nconf": "~0.6.9",
+    "socket.io": "~1.0.6",
+    "serialport": "~1.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodeStrumpet/wine-cellar-simple.git"
+  },
+  "keywords": [
+    "arduino"
+  ],
+  "author": "Paul Mans + George Burkett + Dave Mans",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "c8347ae81815d35ec9b38fd4a10f3f7cf3ca1b2e"
+}

@@ -2,4 +2,4 @@
 
 cd /home/pi/Code/wine-cellar-simple;
 
-forever app.js
+/usr/local/lib/node_modules/forever/bin/forever app.js
