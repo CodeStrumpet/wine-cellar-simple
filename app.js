@@ -94,7 +94,7 @@ serialPort.on("data", function (data) {
                     if (error) {
                         console.log(JSON.stringify(error));
                     } else {
-			console.log(response.body);
+			//console.log(response.body);
 		    }
 
                 });
